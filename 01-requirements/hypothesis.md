@@ -1,0 +1,3 @@
+- Hipótesis 1: Los canales pagos elevan ingresos pero reducen margen.
+- Hipótesis 2: Ciertas categorías concentran descuentos altos.
+- Hipótesis 3: Retención cae a partir del mes 2.

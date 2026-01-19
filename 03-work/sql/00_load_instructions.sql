@@ -1,0 +1,3 @@
+-- Cargar sales.csv y products.csv como tablas 'sales' y 'products'.
+-- En SQL Server: BULK INSERT / OPENROWSET.
+-- En Postgres: COPY.
