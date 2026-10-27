@@ -55,9 +55,13 @@ def _load_and_validate_sales(path: Path) -> list[dict[str, Any]]:
 
     validated: list[dict[str, Any]] = []
     for row_number, row in enumerate(rows, start=2):
-        blanks = [column for column in SALES_REQUIRED if not (row.get(column) or "").strip()]
+        blanks = [
+            column for column in SALES_REQUIRED if not (row.get(column) or "").strip()
+        ]
         if blanks:
-            raise ValueError(f"Sales row {row_number} has blank required fields: {blanks}")
+            raise ValueError(
+                f"Sales row {row_number} has blank required fields: {blanks}"
+            )
 
         try:
             order_date = date.fromisoformat(row["order_date"])
@@ -67,7 +71,9 @@ def _load_and_validate_sales(path: Path) -> list[dict[str, Any]]:
             net_revenue = float(row["net_revenue"])
             cost = float(row["cost"])
         except (TypeError, ValueError) as error:
-            raise ValueError(f"Sales row {row_number} has invalid date/numeric data.") from error
+            raise ValueError(
+                f"Sales row {row_number} has invalid date/numeric data."
+            ) from error
 
         if quantity <= 0:
             raise ValueError(f"Sales row {row_number}: quantity must be positive.")
@@ -103,7 +109,9 @@ def build_star_schema(
     sales = _load_and_validate_sales(sales_path)
     products = _read_csv(products_path, PRODUCTS_REQUIRED)
     for row_number, row in enumerate(products, start=2):
-        blanks = [column for column in PRODUCTS_REQUIRED if not (row.get(column) or "").strip()]
+        blanks = [
+            column for column in PRODUCTS_REQUIRED if not (row.get(column) or "").strip()
+        ]
         if blanks:
             raise ValueError(f"Products row {row_number} has blank fields: {blanks}")
         if row["active"].strip().lower() not in {"yes", "no"}:
@@ -112,7 +120,9 @@ def build_star_schema(
     sales_categories = {row["category"] for row in sales}
     missing_categories = sorted(sales_categories - product_categories)
     if missing_categories:
-        raise ValueError(f"Sales categories missing from product catalog: {missing_categories}")
+        raise ValueError(
+            f"Sales categories missing from product catalog: {missing_categories}"
+        )
     product_ids = [row["product_id"] for row in products]
     if len(product_ids) != len(set(product_ids)):
         raise ValueError("Products CSV contains duplicate product_id values.")
@@ -135,9 +145,15 @@ def build_star_schema(
         date_keys = {value: int(value.strftime("%Y%m%d")) for value in dates}
         customer_keys = {value: index for index, value in enumerate(customers, start=1)}
         channel_keys = {value: index for index, value in enumerate(channels, start=1)}
-        category_keys = {value: index for index, value in enumerate(categories, start=1)}
-        geography_keys = {value: index for index, value in enumerate(geographies, start=1)}
-        payment_keys = {value: index for index, value in enumerate(payment_methods, start=1)}
+        category_keys = {
+            value: index for index, value in enumerate(categories, start=1)
+        }
+        geography_keys = {
+            value: index for index, value in enumerate(geographies, start=1)
+        }
+        payment_keys = {
+            value: index for index, value in enumerate(payment_methods, start=1)
+        }
         device_keys = {value: index for index, value in enumerate(devices, start=1)}
 
         with connection:
@@ -170,10 +186,7 @@ def build_star_schema(
             )
             connection.executemany(
                 "INSERT INTO dim_geography VALUES (?, ?, ?)",
-                [
-                    (geography_keys[value], value[0], value[1])
-                    for value in geographies
-                ],
+                [(geography_keys[value], value[0], value[1]) for value in geographies],
             )
             connection.executemany(
                 "INSERT INTO dim_payment_method VALUES (?, ?)",
@@ -233,7 +246,9 @@ def build_star_schema(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build the retail star schema in SQLite.")
+    parser = argparse.ArgumentParser(
+        description="Build the retail star schema in SQLite."
+    )
     parser.add_argument("--sales", type=Path, default=SALES_PATH)
     parser.add_argument("--products", type=Path, default=PRODUCTS_PATH)
     parser.add_argument("--schema", type=Path, default=SCHEMA_PATH)
