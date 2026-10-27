@@ -1,3 +1,6 @@
--- Cargar sales.csv y products.csv como tablas 'sales' y 'products'.
--- En SQL Server: BULK INSERT / OPENROWSET.
--- En Postgres: COPY.
+-- Generate the SQLite star schema from the committed CSVs:
+--     python scripts/build_star_schema.py
+-- Run the named KPI queries:
+--     python scripts/run_queries.py
+-- Each sales row is one order. sales.csv has no product_id, so do not join
+-- products directly to fact_sales by category at row grain.
