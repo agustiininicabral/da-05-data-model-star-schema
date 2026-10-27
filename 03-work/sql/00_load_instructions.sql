@@ -1,3 +1,7 @@
--- Cargar sales.csv y products.csv como tablas 'sales' y 'products'.
--- En SQL Server: BULK INSERT / OPENROWSET.
--- En Postgres: COPY.
+-- The source CSV files are stored under 02-data/raw/.
+-- Build and validate the dimensional model with:
+--     python scripts/build_star_schema.py
+-- The script loads the sources into temporary SQLite staging tables, runs
+-- 03-work/sql/01_core_queries.sql, and checks row counts, metrics, and keys.
+-- sales.csv has no product_id, so the model intentionally does not invent
+-- a product-level foreign key between sales and the product catalog.
