@@ -4,7 +4,6 @@ import argparse
 import csv
 import sqlite3
 import sys
-from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -103,6 +102,17 @@ def build_star_schema(
 ) -> dict[str, int]:
     sales = _load_and_validate_sales(sales_path)
     products = _read_csv(products_path, PRODUCTS_REQUIRED)
+    for row_number, row in enumerate(products, start=2):
+        blanks = [column for column in PRODUCTS_REQUIRED if not (row.get(column) or "").strip()]
+        if blanks:
+            raise ValueError(f"Products row {row_number} has blank fields: {blanks}")
+        if row["active"].strip().lower() not in {"yes", "no"}:
+            raise ValueError(f"Products row {row_number}: active must be Yes or No.")
+    product_categories = {row["category"] for row in products}
+    sales_categories = {row["category"] for row in sales}
+    missing_categories = sorted(sales_categories - product_categories)
+    if missing_categories:
+        raise ValueError(f"Sales categories missing from product catalog: {missing_categories}")
     product_ids = [row["product_id"] for row in products]
     if len(product_ids) != len(set(product_ids)):
         raise ValueError("Products CSV contains duplicate product_id values.")
