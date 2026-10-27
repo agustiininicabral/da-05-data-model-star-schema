@@ -17,7 +17,7 @@ def test_star_schema_build_and_kpi_queries_reconcile(tmp_path: Path) -> None:
     assert counts["fact_sales"] == 3500
     assert counts["dim_customer"] == 877
     assert counts["dim_category"] == 6
-    assert counts["dim_channel"] == 5
+    assert counts["dim_channel"] == 7
     assert counts["dim_date"] > 300
     assert counts["dim_geography"] > 10
 
