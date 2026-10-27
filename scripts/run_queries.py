@@ -22,7 +22,9 @@ def execute_queries(
 
         match = re.search(r"^\s*--\s*QUERY:\s*(.+)$", statement, flags=re.MULTILINE)
         if match is None:
-            raise ValueError("Every SQL statement must start with a '-- QUERY: name' comment.")
+            raise ValueError(
+                "Every SQL statement must start with a '-- QUERY: name' comment."
+            )
 
         query_name = match.group(1).strip()
         sql = "\n".join(
