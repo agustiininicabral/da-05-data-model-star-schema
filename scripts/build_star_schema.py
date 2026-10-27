@@ -110,7 +110,9 @@ def build_star_schema(
     products = _read_csv(products_path, PRODUCTS_REQUIRED)
     for row_number, row in enumerate(products, start=2):
         blanks = [
-            column for column in PRODUCTS_REQUIRED if not (row.get(column) or "").strip()
+            column
+            for column in PRODUCTS_REQUIRED
+            if not (row.get(column) or "").strip()
         ]
         if blanks:
             raise ValueError(f"Products row {row_number} has blank fields: {blanks}")
