@@ -6,7 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from scripts.build_star_schema import PRODUCTS_PATH, SALES_PATH, SCHEMA_PATH, build_star_schema
+from scripts.build_star_schema import (
+    PRODUCTS_PATH,
+    SALES_PATH,
+    SCHEMA_PATH,
+    build_star_schema,
+)
 from scripts.run_queries import execute_queries, run_queries
 
 
@@ -35,7 +40,9 @@ def test_star_schema_build_and_kpi_queries_reconcile(tmp_path: Path) -> None:
     assert len(results) == 8
     monthly = next(rows for name, rows in results.items() if name.startswith("Q01"))
     cumulative = next(rows for name, rows in results.items() if name.startswith("Q07"))
-    reconciliation = next(rows for name, rows in results.items() if name.startswith("Q08"))
+    reconciliation = next(
+        rows for name, rows in results.items() if name.startswith("Q08")
+    )
 
     assert len(monthly) == 24
     assert float(cumulative[-1]["cumulative_revenue"]) == pytest.approx(
