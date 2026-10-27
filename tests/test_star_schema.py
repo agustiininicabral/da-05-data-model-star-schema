@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sqlite3
-
 from scripts.build_star_schema import build_star_schema
 
 
