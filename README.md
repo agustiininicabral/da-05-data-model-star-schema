@@ -31,7 +31,6 @@ El generador valida IDs, fechas, cantidades, descuentos, importes y coherencia d
 
 ## Modelo
 
-<text></text>
 ```text
                     dim_date
                        |
